@@ -1,11 +1,10 @@
 ## cloneした後にやること
 
-1. docker compose build
+1. docker compose up --build
 
-2. docker compose up -d  (コンテナ立ち上げ)
+2. docker compose run web rails db:setup
 
-2. docker compose run -it -u root web bundle exec rake db:create
-
+2回目以降は `docker compose up -d`
 
 gemを追加するときはGemfileに追記してから `docker compose build` `docker compose up -d` をすればよいはず
 
@@ -24,7 +23,7 @@ docker compose exec db psql -U postgres -d myapp_development  (アプリDB)
 この違いはよくわからないが，基本はアプリDBで行う
 
 
-## 参考
+## やったこと
 Gemfile.lockへの書き込み権限エラーをroot権限でどうにかした
 
 https://qiita.com/nakad119/items/11b44320e2c2e3049a01

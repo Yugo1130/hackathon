@@ -63,7 +63,7 @@ group :test do
 end
 
 # 認証関連追加
-gem 'devise'
-gem 'omniauth'
-gem 'omniauth-rails_csrf_protection'
-gem 'omniauth-github'
+gem "devise"
+gem "omniauth"
+gem "omniauth-rails_csrf_protection"
+gem "omniauth-github"

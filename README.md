@@ -1,14 +1,12 @@
 ## cloneした後にやること
 
-1. `sudo touch config/master.key`
+1. `touch config/master.key`
 
 2. config/master.keyにkeyを書き込み
 
-3. `sudo chmod 644 config/master.key`
+3. `docker compose up --build`
 
-4. `docker compose up --build`
-
-5. `docker compose run web rails db:setup`
+4. `docker compose run web rails db:setup`
 
 2回目以降は `docker compose up -d`
 

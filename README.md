@@ -1,21 +1,14 @@
 ## cloneした後にやること
-1. `sudo mkdir -p tmp/sockets`
 
-2. `sudo mkdir -p tmp/cache`
+1. `sudo touch config/master.key`
 
-3. `sudo chmod -R 777 tmp`
+2. config/master.keyにkeyを書き込み
 
-4. `sudo touch config/master.key`
+3. `sudo chmod 644 config/master.key`
 
-5. `sudo chmod 666 config/master.key`
+4. `docker compose up --build`
 
-6. config/master.keyにkeyを書き込み
-
-7. `sudo chmod 644 config/master.key`
-
-8. `docker compose up --build`
-
-9. `docker compose run web rails db:setup`
+5. `docker compose run web rails db:setup`
 
 2回目以降は `docker compose up -d`
 

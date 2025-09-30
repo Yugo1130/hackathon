@@ -4,9 +4,13 @@
 
 2. config/master.keyにkeyを書き込み
 
+3. `touch log/development.log`
+
+4. `sudo chmod -R 777 log tmp`
+
 3. `docker compose up --build`
 
-4. `docker compose run web rails db:setup`
+4. `docker compose run -it -u root web bundle exec rake db:create`
 
 2回目以降は `docker compose up -d`
 

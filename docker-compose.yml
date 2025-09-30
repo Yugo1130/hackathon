@@ -19,9 +19,7 @@ services:
       - db
     environment:
       RAILS_ENV: "development"
-      DATABASE_HOST: "db"
-      DATABASE_USER: "postgres"
-      POSTGRES_PASSWORD: "password"
+      DATABASE_URL: "postgres://postgres:password@db:5432/myapp_development"
 
 volumes:
   postgres-data:

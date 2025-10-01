@@ -5,7 +5,7 @@ class Transfer < ApplicationRecord
     belongs_to :previous_transfer, class_name: 'Transfer', optional: true
     has_one :url, dependent: :destroy
 
-    enum status: {
+    enum :status, {
         received:   0,  # 受領済（自分が受け取った）
         url_issued: 1,  # URL発行済
         sent:       2,  # 送付済（相手に渡した）

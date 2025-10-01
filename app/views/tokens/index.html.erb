@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Tokens" %>
+
+<h1>Tokens</h1>
+
+<div id="tokens">
+  <% @tokens.each do |token| %>
+    <%= render token %>
+    <p>
+      <%= link_to "Show this token", token %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New token", new_token_path %>

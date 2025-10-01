@@ -1,0 +1,11 @@
+<% content_for :title, "New token" %>
+
+<h1>New token</h1>
+
+<%= render "form", token: @token %>
+
+<br>
+
+<div>
+  <%= link_to "Back to tokens", tokens_path %>
+</div>

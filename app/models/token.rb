@@ -1,0 +1,16 @@
+class Token < ApplicationRecord
+    has_many :transfers
+
+    # 論理削除されていないものだけ取得
+    scope :active, -> { where(deleted_at: nil) }
+    
+    # 論理削除メソッド
+    def soft_delete
+        update(deleted_at: Time.current)
+    end
+
+    # 現在の所有者を取得（statusがreceivedまたはurl_issuedの最新のTransfer）
+    def current_transfer
+        transfers.where(status: [:received, :url_issued]).order(created_at: :desc).first
+    end
+end

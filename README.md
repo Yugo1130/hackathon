@@ -18,10 +18,6 @@ gemを追加するときはGemfileに追記してから `docker compose build` `
 
 docker compose exec web bash
 
-(root権限の場合)
-
-docker compose exec -u root web bash
-
 
 - dbコンテナへの入り方
 

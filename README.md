@@ -1,14 +1,12 @@
 ## cloneした後にやること
 
-1. `touch config/master.key`
+1. `docker compose build`
 
-2. config/master.keyにkeyを書き込み
+2. `docker compose up -d`
 
-3. `touch log/development.log`
+3. webコンテナ内で `bundle exec rake db:create`
 
-4. `sudo chmod -R 777 log tmp`
-
-5. `docker compose up --build`
+4. webコンテナ内で `bin/rails db:migrate`
 
 
 2回目以降は `docker compose up -d`

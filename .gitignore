@@ -28,14 +28,6 @@
 !/tmp/storage/
 !/tmp/storage/.keep
 
-/tmp/cache/*
-!/tmp/cache/
-!/tmp/cache/.keep
-
-/tmp/sockets/*
-!/tmp/sockets/
-!/tmp/sockets/.keep
-
 /public/assets
 
 # Ignore master key for decrypting credentials and more.

@@ -1,3 +1,4 @@
+<!-- app/views/layouts/application.html.erb -->
 <!DOCTYPE html>
 <html>
   <head>
@@ -10,19 +11,116 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <!-- Tailwind と任意の自前CSSを読み込み -->
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <%= yield %>
+  <!-- 画面全体を縦フレックス化（フッターを下へ） -->
+  <body class="min-h-screen flex flex-col bg-gray-50 text-gray-900">
+    <!-- キーボード利用者向けのスキップリンク -->
+    <a href="#main"
+       class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 bg-black text-white px-3 py-2 rounded-md">
+      メインへスキップ
+    </a>
+
+    <!-- 上部固定ヘッダー（stickyなので main に余白いりません） -->
+    <header class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-gray-200">
+      <nav class="max-w-7xl mx-auto h-16 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        <!-- 左：ロゴ + デスクトップ用ナビ -->
+        <div class="flex items-center gap-6">
+          <a href="/" class="text-lg sm:text-xl font-bold tracking-tight">Myapp</a>
+          <div class="hidden md:flex items-center gap-4">
+            <%= link_to "Tokens", tokens_path,     class: "text-sm font-medium text-gray-700 hover:text-gray-900" %>
+            <%= link_to "Transfers", transfers_path, class: "text-sm font-medium text-gray-700 hover:text-gray-900" %>
+            <%= link_to "URLs", urls_path,         class: "text-sm font-medium text-gray-700 hover:text-gray-900" %>
+          </div>
+        </div>
+
+        <!-- 右：アクション（ログイン/ログアウトなど） -->
+        <div class="hidden md:flex items-center gap-3">
+          <% if defined?(user_signed_in?) && user_signed_in? %>
+            <%= link_to "Dashboard", tokens_path,
+                  class: "inline-flex items-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
+            <%= link_to "Logout", destroy_user_session_path, method: :delete,
+                  class: "inline-flex items-center rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700" %>
+          <% else %>
+            <%= link_to "Sign in", new_user_session_path,
+                  class: "inline-flex items-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
+            <%= link_to "Sign up", new_user_registration_path,
+                  class: "inline-flex items-center rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700" %>
+          <% end %>
+        </div>
+
+        <!-- モバイル：ハンバーガー -->
+        <button id="menu-button"
+                class="md:hidden inline-flex items-center justify-center rounded-md p-2 text-gray-700 hover:bg-gray-100"
+                aria-label="メニューを開く" aria-expanded="false" aria-controls="mobile-menu">
+          <!-- ハンバーガーアイコン -->
+          <svg viewBox="0 0 24 24" fill="none" class="h-6 w-6" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </nav>
+
+      <!-- モバイル用メニュー -->
+      <div id="mobile-menu" class="md:hidden hidden border-t border-gray-200 bg-white" role="region">
+        <div class="px-4 py-3 space-y-2">
+          <%= link_to "Tokens", tokens_path,       class: "block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
+          <%= link_to "Transfers", transfers_path, class: "block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
+          <%= link_to "URLs", urls_path,           class: "block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
+          <div class="border-t border-gray-200 my-2"></div>
+          <% if defined?(user_signed_in?) && user_signed_in? %>
+            <%= link_to "Dashboard", tokens_path, class: "block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
+            <%= link_to "Logout", destroy_user_session_path, method: :delete,
+                  class: "block rounded-md px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50" %>
+          <% else %>
+            <%= link_to "Sign in", new_user_session_path, class: "block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
+            <%= link_to "Sign up", new_user_registration_path,
+                  class: "block rounded-md px-3 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 text-center" %>
+          <% end %>
+        </div>
+      </div>
+    </header>
+
+    <!-- メイン：中央寄せ & 余白 -->
+    <main id="main" class="flex-1">
+      <div class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6">
+        <!-- Flash メッセージ -->
+        <% flash.each do |type, message| %>
+          <div class="mb-4 rounded-md border px-4 py-3 text-sm
+                      <%= type.to_s.in?(%w[alert error]) ? 'border-red-300 bg-red-50 text-red-800' : 'border-emerald-300 bg-emerald-50 text-emerald-900' %>">
+            <%= message %>
+          </div>
+        <% end %>
+
+        <%= yield %>
+      </div>
+    </main>
+
+    <!-- フッター -->
+    <footer class="border-t border-gray-200 bg-white">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-sm text-gray-500">
+        &copy; <%= Time.current.year %> Myapp
+      </div>
+    </footer>
+
+    <!-- モバイルメニュー開閉（CSP対応のnonce付き） -->
+    <script nonce="<%= content_security_policy_nonce %>">
+      (function () {
+        var btn  = document.getElementById('menu-button');
+        var menu = document.getElementById('mobile-menu');
+        if (!btn || !menu) return;
+        btn.addEventListener('click', function () {
+          var hidden = menu.classList.toggle('hidden'); // hidden ↔ 表示
+          btn.setAttribute('aria-expanded', String(!hidden));
+        });
+      })();
+    </script>
   </body>
 </html>

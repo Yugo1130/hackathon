@@ -4,12 +4,12 @@
 <div class="max-w-3xl space-y-6">
     <% if @transfer.sender_id == current_user&.id %>
         <h1 class="text-2xl font-semibold">
-            これはあなたが送信したメッセージです。
+            これはあなたが送信したバトンです。
         </h1>
         <% if @transfer.slug.present? %>
             <% full_url = "#{request.base_url}/t/#{@transfer.slug}" %>
             <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 max-w-3xl">
-                <span class="block text-sm font-medium text-emerald-900 mb-1">発行済みURL（このURLを送信してください）</span>
+                <span class="block text-sm font-medium text-emerald-900 mb-1">発行済みリンク（このリンクを送信してください）</span>
                 <%= link_to full_url, full_url, target: "_blank", rel: "noopener",
                         class: "break-all text-emerald-900 underline underline-offset-2 hover:opacity-80" %>
             </div>
@@ -17,7 +17,7 @@
 
     <% else %>
         <h1 class="text-2xl font-semibold">
-            <%= "#{@transfer.sender.name} からあなた宛てにメッセージが届いています！" %>
+            <%= "#{@transfer.sender.name} からあなた宛てにバトンが届いています！" %>
         </h1>
 
         <%# 受け取りボタン（POST /t/:slug/receive） %>
@@ -25,8 +25,8 @@
             <%= button_to "受け取る",
                 receive_transfer_path(slug: params[:slug]),
                 method: :post,
-                data: { turbo_confirm: "このトークンを受け取りますか？" },
-                class: "inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700" %>
+                data: { turbo_confirm: "このバトンを受け取りますか？" },
+                class: "inline-flex items-center rounded-xl bg-[#F08B71] px-4 py-2 text-sm font-semibold text-white hover:opacity-90" %>
         </div>
     <% end %>
 </div>

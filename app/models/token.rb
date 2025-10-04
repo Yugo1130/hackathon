@@ -27,4 +27,19 @@ class Token < ApplicationRecord
     def chain
         transfers.active.where(status: :sent).order(created_at: :asc)
     end
+
+    # トークン数
+    def self.total_tokens
+        count
+    end
+
+    # 最長チェーンの長さ
+    def self.longest_token_length
+        joins(:transfers)
+            .where(transfers: { status: :sent })
+            .group("tokens.id")
+            .count("transfers.id")
+            .values
+            .max || 0
+    end
 end

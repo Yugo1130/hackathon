@@ -55,7 +55,7 @@ class TransfersController < ApplicationController
       @transfer.save!
     end
 
-    redirect_to edit_transfer_path(@transfer), notice: "URLを発行しました"
+    redirect_to edit_transfer_path(@transfer), notice: "リンクを発行しました"
   rescue ActiveRecord::RecordInvalid => e
     flash.now[:alert] = "保存に失敗しました: #{e.record.errors.full_messages.join(', ')}"
     render :edit, status: :unprocessable_entity
@@ -76,24 +76,24 @@ class TransfersController < ApplicationController
     @token = @transfer.token
     render :receive
   rescue ActiveRecord::RecordNotFound
-    redirect_to mypage_path, alert: "無効なURLです。"
+    redirect_to mypage_path, alert: "無効なリンクです。"
   end
 
   def receive
     # 自分が送信者になっている譲渡情報は受け取れない
     if @transfer.sender == current_user
-      redirect_to mypage_path, alert: "自分が送信者のトークンは受け取れません。"
+      redirect_to mypage_path, alert: "自分が送信者のバトンは受け取れません。"
       return
     end
     # 既に受け取られている譲渡情報は受け取れない
     if @transfer.status != "url_issued"
-      redirect_to mypage_path, alert: "このトークンは既に受け取られています。"
+      redirect_to mypage_path, alert: "このバトンは既に受け取られています。"
       return 
     end
     @transfer.receive!(current_user)
-    redirect_to mypage_path, notice: "トークンを受け取りました。"
+    redirect_to mypage_path, notice: "バトンを受け取りました。"
   rescue ActiveRecord::RecordInvalid => e
-    redirect_to mypage_path, alert: "トークンの受け取りに失敗しました。#{e.message}"
+    redirect_to mypage_path, alert: "バトンの受け取りに失敗しました。#{e.message}"
   end        
 
   private

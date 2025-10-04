@@ -45,89 +45,72 @@
   </section>
 
   <!-- 履歴（受信/送信） -->
-  <section class="mt-10">
+  <section class="mt-10 mb-4">
     <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
-      <!-- 受信履歴 -->
-      <div>
-        <h2 class="mb-3 text-lg font-semibold">受信履歴</h2>
-        <div class="space-y-3">
-          <% if @received_token_transfers.present? %>
-            <% @received_token_transfers.each do |t| %>
-              <%= link_to transfer_path(t),
-                    class: "flex items-center justify-between rounded-2xl border p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow" do %>
-                <div>
-                  <p class="font-medium">
-                    履歴<%= t.id %>
-                    <% if t.token %>
-                      ・<span class="text-gray-600"><%= t.token.title.presence || "トークン#{t.token_id}" %></span>
-                    <% end %>
-                  </p>
-                  <p class="text-xs text-gray-500">
-                    更新：<%= (l(t.updated_at, format: :short) rescue t.updated_at) %>
-                  </p>
-                </div>
-                <span class="rounded-full border px-2 py-1 text-xs
-                  <%= case t.status.to_s
-                      when "received"   then "bg-emerald-50 text-emerald-700 border-emerald-200"
-                      when "url_issued" then "bg-amber-50 text-amber-700 border-amber-200"
-                      when "sent"       then "bg-sky-50 text-sky-700 border-sky-200"
-                      else                    "bg-gray-50 text-gray-700"
-                    end %>">
-                  <%= t.status %>
-                </span>
-              <% end %>
-            <% end %>
-          <% else %>
-            <div class="rounded-2xl border p-6 text-center text-gray-500">
-              受信履歴はありません
-            </div>
-          <% end %>
-        </div>
-      </div>
-
       <!-- 送信履歴 -->
       <div>
         <h2 class="mb-3 text-lg font-semibold">送信履歴</h2>
-        <div class="space-y-3">
-          <% if @sent_token_transfers.present? %>
-            <% @sent_token_transfers.each do |t| %>
-              <%= link_to transfer_path(t),
-                    class: "flex items-center justify-between rounded-2xl border p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow" do %>
-                <div>
-                  <p class="font-medium">
-                    履歴<%= t.id %>
-                    <% if t.token %>
-                      ・<span class="text-gray-600"><%= t.token.title.presence || "トークン#{t.token_id}" %></span>
-                    <% end %>
-                  </p>
-                  <p class="text-xs text-gray-500">
-                    作成：<%= (l(t.created_at, format: :short) rescue t.created_at) %>
-                  </p>
-                </div>
-                <span class="rounded-full border px-2 py-1 text-xs
-                  <%= case t.status.to_s
-                      when "received"   then "bg-emerald-50 text-emerald-700 border-emerald-200"
-                      when "url_issued" then "bg-amber-50 text-amber-700 border-amber-200"
-                      when "sent"       then "bg-sky-50 text-sky-700 border-sky-200"
-                      else                    "bg-gray-50 text-gray-700"
-                    end %>">
-                  <%= t.status %>
-                </span>
+        <div class="overflow-x-auto rounded-2xl border bg-white">
+          <table class="min-w-full text-sm">
+            <thead class="bg-gray-50 text-gray-600">
+              <tr>
+                <th class="px-4 py-2 text-left font-medium">トークンID</th>
+                <th class="px-4 py-2 text-left font-medium">送信日時</th>
+                <th class="px-4 py-2 text-left font-medium">受信者</th>
+                <th class="px-4 py-2 text-left font-medium">メッセージ内容</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y">
+              <% if @sent_token_transfers.present? %>
+                <% @sent_token_transfers.each do |tr| %>
+                  <tr class="hover:bg-gray-50 cursor-pointer" onclick="window.location.href='<%= transfer_path(tr) %>'">
+                    <td class="px-4 py-2"><%= tr.token_id %></td>
+                    <td class="px-4 py-2"><%= l tr.created_at %></td>
+                    <td class="px-4 py-2"><%= tr.receiver&.id %></td>
+                    <td class="px-4 py-2">  <%= h(tr.message.to_s.squish.truncate(20, omission: '…')) %>                    </td>
+                  </tr>
+                <% end %>
+              <% else %>
+                <tr><td colspan="3" class="px-4 py-6 text-center text-gray-500">送信履歴はありません</td></tr>
               <% end %>
-            <% end %>
-          <% else %>
-            <div class="rounded-2xl border p-6 text-center text-gray-500">
-              送信履歴はありません
-            </div>
-          <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- 受信履歴 -->
+      <div>
+        <h2 class="mb-3 text-lg font-semibold">受信履歴</h2>
+        <div class="overflow-x-auto rounded-2xl border bg-white">
+          <table class="min-w-full text-sm">
+            <thead class="bg-gray-50 text-gray-600">
+              <tr>
+                <th class="px-4 py-2 text-left font-medium">トークンID</th>
+                <th class="px-4 py-2 text-left font-medium">受信日時</th>
+                <th class="px-4 py-2 text-left font-medium">送信者</th>
+                <th class="px-4 py-2 text-left font-medium">メッセージ内容</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y">
+              <% if @received_token_transfers.present? %>
+                <% @received_token_transfers.each do |tr| %>
+                  <tr class="hover:bg-gray-50 cursor-pointer" onclick="window.location.href='<%= transfer_path(tr) %>'">
+                    <td class="px-4 py-2"><%= tr.token_id %></td>
+                    <td class="px-4 py-2"><%= l tr.created_at %></td>
+                    <td class="px-4 py-2"><%= tr.sender&.id %></td>
+                    <td class="px-4 py-2">  <%= h(tr.message.to_s.squish.truncate(20, omission: '…')) %>                    </td>
+                  </tr>
+                <% end %>
+              <% else %>
+                <tr><td colspan="3" class="px-4 py-6 text-center text-gray-500">受信履歴はありません</td></tr>
+              <% end %>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </section>
-  <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-    <div class="flex items-center gap-2">
-      <%= link_to "ユーザ情報編集", edit_user_registration_path,
-            class: "rounded-lg border px-3 py-2 text-sm hover:bg-gray-50" %>
-    </div>
+  <div class="flex items-center gap-2">
+    <%= link_to "ユーザ情報編集", edit_user_registration_path,
+          class: "rounded-lg bg-black px-3 py-2 text-sm font-medium text-white hover:opacity-90" %>
   </div>
 </div>

@@ -1,10 +1,37 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, "トークン詳細 | Myapp" %>
 
-<%= render @transfer %>
+<div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-6">
+  <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <h1 class="text-2xl font-bold">送受信履歴詳細</h1>
+  </div>
 
-<div>
-  <%= link_to "Edit this transfer", edit_transfer_path(@transfer) %> |
-  <%= link_to "Back to transfers", transfers_path %>
+  <!-- 本体カード（ワイヤーの枠組み） -->
+  <div class="mb-4 rounded-2xl border border-gray-300 bg-white p-4 sm:p-6 shadow-sm">
+    <%# 便利用の変数（最新の送信/受信レコード） %>
+    <% latest_sent      = @token.transfers.where(status: :sent).order(created_at: :desc).first rescue nil %>
+    <% latest_received  = @token.transfers.where(status: :received).order(created_at: :desc).first rescue nil %>
 
-  <%= button_to "Destroy this transfer", @transfer, method: :delete %>
+    <!-- 1段目：トークンID -->
+    <div class="grid grid-cols-12">
+      <div class="col-span-3 border border-gray-300 bg-gray-50 p-4 text-sm font-medium">トークンID</div>
+      <div class="col-span-9 border border-gray-300 p-4 text-base"><%= @transfer.token_id %></div>
+      <div class="col-span-3 border border-gray-300 bg-gray-50 p-4 text-sm font-medium">送信者</div>
+      <div class="col-span-3 border border-gray-300 p-4"><%= @transfer.sender_id %></div>
+      <div class="col-span-3 border border-gray-300 bg-gray-50 p-4 text-sm font-medium">受信者</div>
+      <div class="col-span-3 border border-gray-300 p-4"><%= @transfer.receiver_id %></div>
+      <div class="col-span-3 border border-gray-300 bg-gray-50 p-4 text-sm font-medium">受信日</div>
+      <div class="col-span-3 border border-gray-300 p-4"><%= l @transfer.updated_at %></div>
+      <% if defined?(user_signed_in?) && user_signed_in? &&
+          [@transfer.sender_id, @transfer.receiver_id].compact.include?(current_user.id) %>
+        <div class="col-span-3 border border-gray-300 bg-gray-50 p-4 text-sm font-medium">メッセージ内容</div>
+        <div class="col-span-3 border border-gray-300 p-4"><%= @transfer.message %></div>
+      <% end %>
+    </div>
+  </div>
+  <!-- 戻るボタン（左寄せ） -->
+  <div class="flex items-center gap-2">
+    <%= link_to "戻る",
+        (request.referer.presence || mypage_path),
+        class: "rounded-lg border px-3 py-2 text-sm hover:bg-gray-50" %>
+  </div>
 </div>

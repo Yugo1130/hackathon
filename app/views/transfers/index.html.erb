@@ -1,16 +1,27 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, "Transfer" %>
 
-<% content_for :title, "Transfers" %>
+<h2 class="mb-3 text-lg font-semibold">チェーン一覧</h2>
 
-<h1>Transfers</h1>
-
-<div id="transfers">
-  <% @transfers.each do |transfer| %>
-    <%= render transfer %>
-    <p>
-      <%= link_to "Show this transfer", transfer %>
-    </p>
-  <% end %>
+<div class="overflow-x-auto rounded-2xl border bg-white">
+  <table class="min-w-full text-sm">
+    <thead class="bg-gray-50 text-gray-600">
+      <tr>
+        <th class="px-4 py-2 text-left font-medium">チェーンID</th>
+        <th class="px-4 py-2 text-left font-medium">チェーン作成日</th>
+        <th class="px-4 py-2 text-left font-medium">送信者</th>
+        <th class="px-4 py-2 text-left font-medium">受信者</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y">
+      <% @transfers.each do |transfer| %>
+        <tr class="hover:bg-gray-50 cursor-pointer"
+              onclick="window.location.href='<%= transfer_path(transfer) %>'">
+          <td class="px-4 py-2"><%= transfer.id %></td>
+          <td class="px-4 py-2"><%= l transfer.created_at %></td>
+          <td class="px-4 py-2"><%= transfer.sender&.id %></td>
+          <td class="px-4 py-2"><%= transfer.receiver&.id %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>
-
-<%= link_to "New transfer", new_transfer_path %>

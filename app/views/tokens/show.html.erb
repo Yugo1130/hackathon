@@ -30,63 +30,65 @@
 
       <div class="rounded-2xl border bg-white p-4">
         <div class="text-sm text-gray-500">総チェーン数</div>
-        <div class="mt-1 text-xl font-semibold"><%= @chain_count || @all_transfers&.size || 0 %></div>
+        <div class="mt-1 text-xl font-semibold"><%= @chain_count %></div>
       </div>
     </div>
   </section>
 
-  <!-- 自分が関係している履歴（送信／受信） -->
+  <!-- 履歴（送信／受信） -->
   <section class="mt-10 grid grid-cols-1 gap-8 lg:grid-cols-2">
-    <!-- 自分が関係している送信履歴 -->
+    <!-- 送信履歴 -->
     <div>
-      <h2 class="mb-3 text-lg font-semibold">自身が関係している送信履歴</h2>
+      <h2 class="mb-3 text-lg font-semibold">送信履歴</h2>
       <div class="overflow-x-auto rounded-2xl border bg-white">
         <table class="min-w-full text-sm">
           <thead class="bg-gray-50 text-gray-600">
             <tr>
               <th class="px-4 py-2 text-left font-medium">送信日時</th>
               <th class="px-4 py-2 text-left font-medium">受信者</th>
+              <th class="px-4 py-2 text-left font-medium">メッセージ内容</th>
             </tr>
           </thead>
           <tbody class="divide-y">
             <% if @my_sent_transfers.present? %>
               <% @my_sent_transfers.each do |tr| %>
                 <tr class="hover:bg-gray-50 cursor-pointer" onclick="window.location.href='<%= transfer_path(tr) %>'">
-                  <td class="px-4 py-2"><%= l(tr.created_at, format: :short) rescue tr.created_at %></td>
-                  <td class="px-4 py-2"><%= tr.receiver&.name || tr.receiver&.email || "未設定" %></td>
-                  <td class="px-4 py-2"><%= tr.status %></td>
+                  <td class="px-4 py-2"><%= l tr.created_at %></td>
+                  <td class="px-4 py-2"><%= tr.receiver&.id %></td>
+                  <td class="px-4 py-2">  <%= h(tr.message.to_s.squish.truncate(20, omission: '…')) %>                    </td>
                 </tr>
               <% end %>
             <% else %>
-              <tr><td colspan="3" class="px-4 py-6 text-center text-gray-500">該当なし</td></tr>
+              <tr><td colspan="3" class="px-4 py-6 text-center text-gray-500">送信履歴はありません</td></tr>
             <% end %>
           </tbody>
         </table>
       </div>
     </div>
 
-    <!-- 自分が関係している受領履歴 -->
+    <!-- 受信履歴 -->
     <div>
-      <h2 class="mb-3 text-lg font-semibold">自身が関係している受領履歴</h2>
+      <h2 class="mb-3 text-lg font-semibold">受信履歴</h2>
       <div class="overflow-x-auto rounded-2xl border bg-white">
         <table class="min-w-full text-sm">
           <thead class="bg-gray-50 text-gray-600">
             <tr>
-              <th class="px-4 py-2 text-left font-medium">受領日時</th>
+              <th class="px-4 py-2 text-left font-medium">受信日時</th>
               <th class="px-4 py-2 text-left font-medium">送信者</th>
+              <th class="px-4 py-2 text-left font-medium">メッセージ内容</th>
             </tr>
           </thead>
           <tbody class="divide-y">
             <% if @my_received_transfers.present? %>
               <% @my_received_transfers.each do |tr| %>
                 <tr class="hover:bg-gray-50 cursor-pointer" onclick="window.location.href='<%= transfer_path(tr) %>'">
-                  <td class="px-4 py-2"><%= l(tr.created_at, format: :short) rescue tr.created_at %></td>
-                  <td class="px-4 py-2"><%= tr.sender&.name || tr.sender&.email || "未設定" %></td>
-                  <td class="px-4 py-2"><%= tr.status %></td>
+                  <td class="px-4 py-2"><%= l tr.created_at %></td>
+                  <td class="px-4 py-2"><%= tr.sender&.id %></td>
+                  <td class="px-4 py-2">  <%= h(tr.message.to_s.squish.truncate(20, omission: '…')) %>                    </td>
                 </tr>
               <% end %>
             <% else %>
-              <tr><td colspan="3" class="px-4 py-6 text-center text-gray-500">該当なし</td></tr>
+              <tr><td colspan="3" class="px-4 py-6 text-center text-gray-500">受信履歴はありません</td></tr>
             <% end %>
           </tbody>
         </table>
@@ -110,20 +112,9 @@
           <% if @all_transfers.present? %>
             <% @all_transfers.each do |tr| %>
               <tr class="hover:bg-gray-50 cursor-pointer" onclick="window.location.href='<%= transfer_path(tr) %>'">
-                <td class="px-4 py-2"><%= l(tr.created_at, format: :short) rescue tr.created_at %></td>
-                <td class="px-4 py-2"><%= tr.sender&.name || tr.sender&.email || "-" %></td>
-                <td class="px-4 py-2"><%= tr.receiver&.name || tr.receiver&.email || "-" %></td>
-                <td class="px-4 py-2">
-                  <span class="rounded-full border px-2 py-0.5 text-xs
-                    <%= case tr.status.to_s
-                        when "received"   then "bg-emerald-50 text-emerald-700 border-emerald-200"
-                        when "url_issued" then "bg-amber-50 text-amber-700 border-amber-200"
-                        when "sent"       then "bg-sky-50 text-sky-700 border-sky-200"
-                        else                    "bg-gray-50 text-gray-700"
-                      end %>">
-                    <%= tr.status %>
-                  </span>
-                </td>
+                <td class="px-4 py-2"><%= l tr.created_at %></td>
+                <td class="px-4 py-2"><%= tr.sender&.id %></td>
+                <td class="px-4 py-2"><%= tr.receiver&.id %></td>
               </tr>
             <% end %>
           <% else %>

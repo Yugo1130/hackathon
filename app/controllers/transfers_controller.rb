@@ -1,9 +1,10 @@
 class TransfersController < ApplicationController
   before_action :set_transfer, only: %i[ show edit update destroy ]
+  before_action :set_transfer_by_slug!, only: %i[ show_by_slug receive ]  # ← 追加
 
   # GET /transfers or /transfers.json
   def index
-    @transfers = Transfer.all
+    @transfers = Transfer.where(status: :sent).order(created_at: :desc)
   end
 
   # GET /transfers/1 or /transfers/1.json
@@ -72,17 +73,30 @@ class TransfersController < ApplicationController
     redirect_to mypage_path, alert: "無効なURLです。"
   end
 
+  def receive
+    @transfer.receive!(current_user)
+    redirect_to mypage_path, notice: "トークンを受け取りました。"
+  rescue ActiveRecord::RecordInvalid => e
+    redirect_to mypage_path, alert: "トークンの受け取りに失敗しました。#{e.message}"
+  end        
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_transfer
       @transfer = Transfer.find(params[:id])
     end
 
+    def set_transfer_by_slug!
+      @transfer = Transfer.active.where(status: :url_issued).find_by!(slug: params[:slug])
+      @token = @transfer.token  # 関連するトークン
+    rescue ActiveRecord::RecordNotFound
+      redirect_to mypage_path, alert: "無効なURLです。"
+    end
+
     # slugを一意に生成
     # except_id: 自分自身のIDを除外する（更新時用）
     def generate_unique_slug(except_id: nil)
       loop do
-        # 好みで :uuid / :hex / :urlsafe を選択
         slug = SecureRandom.uuid
 
         # 自分以外に同じslugが無ければ採用

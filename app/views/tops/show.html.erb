@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @top %>
+
+<div>
+  <%= link_to "Edit this top", edit_top_path(@top) %> |
+  <%= link_to "Back to tops", tops_path %>
+
+  <%= button_to "Destroy this top", @top, method: :delete %>
+</div>

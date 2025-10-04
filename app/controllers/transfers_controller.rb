@@ -74,6 +74,16 @@ class TransfersController < ApplicationController
   end
 
   def receive
+    # 自分が送信者になっている譲渡情報は受け取れない
+    if @transfer.sender == current_user
+      redirect_to mypage_path, alert: "自分が送信者のトークンは受け取れません。"
+      return
+    end
+    # 既に受け取られている譲渡情報は受け取れない
+    if @transfer.status != "url_issued"
+      redirect_to mypage_path, alert: "このトークンは既に受け取られています。"
+      return 
+    end
     @transfer.receive!(current_user)
     redirect_to mypage_path, notice: "トークンを受け取りました。"
   rescue ActiveRecord::RecordInvalid => e

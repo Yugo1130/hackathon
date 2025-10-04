@@ -1,4 +1,3 @@
-<!-- app/views/layouts/application.html.erb -->
 <!DOCTYPE html>
 <html>
   <head>
@@ -38,16 +37,15 @@
           <div class="hidden md:flex items-center gap-4">
             <%= link_to "Tokens", tokens_path,     class: "text-sm font-medium text-gray-700 hover:text-gray-900" %>
             <%= link_to "Transfers", transfers_path, class: "text-sm font-medium text-gray-700 hover:text-gray-900" %>
-            <%= link_to "URLs", urls_path,         class: "text-sm font-medium text-gray-700 hover:text-gray-900" %>
           </div>
         </div>
 
         <!-- 右：アクション（ログイン/ログアウトなど） -->
         <div class="hidden md:flex items-center gap-3">
           <% if defined?(user_signed_in?) && user_signed_in? %>
-            <%= link_to "Dashboard", tokens_path,
+            <%= link_to "Mypage", mypage_path,
                   class: "inline-flex items-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
-            <%= link_to "Logout", destroy_user_session_path, method: :delete,
+            <%= button_to "Logout", destroy_user_session_path, method: :delete,
                   class: "inline-flex items-center rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700" %>
           <% else %>
             <%= link_to "Sign in", new_user_session_path,
@@ -73,11 +71,10 @@
         <div class="px-4 py-3 space-y-2">
           <%= link_to "Tokens", tokens_path,       class: "block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
           <%= link_to "Transfers", transfers_path, class: "block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
-          <%= link_to "URLs", urls_path,           class: "block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
           <div class="border-t border-gray-200 my-2"></div>
           <% if defined?(user_signed_in?) && user_signed_in? %>
-            <%= link_to "Dashboard", tokens_path, class: "block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
-            <%= link_to "Logout", destroy_user_session_path, method: :delete,
+            <%= link_to "Mypage", mypage_path, class: "block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
+            <%= button_to "Logout", destroy_user_session_path, method: :delete,
                   class: "block rounded-md px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50" %>
           <% else %>
             <%= link_to "Sign in", new_user_session_path, class: "block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-50" %>

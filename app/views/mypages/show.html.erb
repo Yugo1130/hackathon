@@ -1,0 +1,116 @@
+<% content_for :title, "マイページ | Myapp" %>
+
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+  <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <h1 class="text-2xl font-bold">マイページ</h1>
+    <div class="flex items-center gap-2">
+      <%= button_to "新しいトークンを発行する",
+            tokens_path, method: :post,
+            data: { turbo_confirm: "新しいトークンを発行します。よろしいですか？" },
+            class: "rounded-lg bg-black px-3 py-2 text-sm font-medium text-white hover:opacity-90" %>
+    </div>
+  </div>
+
+  <% if flash[:issued_url].present? %>
+    <div class="mb-6 rounded-xl border bg-gray-50 px-4 py-3 text-sm">
+      発行されたURL：
+      <a class="font-medium underline" href="<%= flash[:issued_url] %>"><%= flash[:issued_url] %></a>
+    </div>
+  <% end %>
+
+  <!-- 所持トークン一覧 -->
+  <section class="mt-2">
+    <h2 class="mb-3 text-lg font-semibold">所持トークン一覧</h2>
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <% if @owned_tokens.present? %>
+        <% @owned_tokens.each do |token| %>
+          <%= link_to token_path(token),
+                      class: "group block rounded-2xl border p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow" do %>
+            <div class="flex items-center justify-between">
+              <p class="font-semibold"><%= "トークン #{token.id} " %></p>
+              <span class="text-xs text-gray-500 group-hover:text-gray-700">詳細へ</span>
+            </div>
+            <% if token.respond_to?(:description) %>
+              <p class="mt-2 line-clamp-2 text-sm text-gray-600"><%= token.description %></p>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <div class="rounded-2xl border p-6 text-center text-gray-500">
+          所持トークンはまだありません
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <!-- 履歴（受信/送信） -->
+  <section class="mt-10 mb-4">
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+      <!-- 送信履歴 -->
+      <div>
+        <h2 class="mb-3 text-lg font-semibold">送信履歴</h2>
+        <div class="overflow-x-auto rounded-2xl border bg-white">
+          <table class="min-w-full text-sm">
+            <thead class="bg-gray-50 text-gray-600">
+              <tr>
+                <th class="px-4 py-2 text-left font-medium">トークンID</th>
+                <th class="px-4 py-2 text-left font-medium">送信日時</th>
+                <th class="px-4 py-2 text-left font-medium">受信者</th>
+                <th class="px-4 py-2 text-left font-medium">メッセージ内容</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y">
+              <% if @sent_token_transfers.present? %>
+                <% @sent_token_transfers.each do |tr| %>
+                  <tr class="hover:bg-gray-50 cursor-pointer" onclick="window.location.href='<%= transfer_path(tr) %>'">
+                    <td class="px-4 py-2"><%= tr.token_id %></td>
+                    <td class="px-4 py-2"><%= l tr.created_at %></td>
+                    <td class="px-4 py-2"><%= tr.receiver&.id %></td>
+                    <td class="px-4 py-2">  <%= h(tr.message.to_s.squish.truncate(20, omission: '…')) %>                    </td>
+                  </tr>
+                <% end %>
+              <% else %>
+                <tr><td colspan="3" class="px-4 py-6 text-center text-gray-500">送信履歴はありません</td></tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- 受信履歴 -->
+      <div>
+        <h2 class="mb-3 text-lg font-semibold">受信履歴</h2>
+        <div class="overflow-x-auto rounded-2xl border bg-white">
+          <table class="min-w-full text-sm">
+            <thead class="bg-gray-50 text-gray-600">
+              <tr>
+                <th class="px-4 py-2 text-left font-medium">トークンID</th>
+                <th class="px-4 py-2 text-left font-medium">受信日時</th>
+                <th class="px-4 py-2 text-left font-medium">送信者</th>
+                <th class="px-4 py-2 text-left font-medium">メッセージ内容</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y">
+              <% if @received_token_transfers.present? %>
+                <% @received_token_transfers.each do |tr| %>
+                  <tr class="hover:bg-gray-50 cursor-pointer" onclick="window.location.href='<%= transfer_path(tr) %>'">
+                    <td class="px-4 py-2"><%= tr.token_id %></td>
+                    <td class="px-4 py-2"><%= l tr.created_at %></td>
+                    <td class="px-4 py-2"><%= tr.sender&.id %></td>
+                    <td class="px-4 py-2">  <%= h(tr.message.to_s.squish.truncate(20, omission: '…')) %>                    </td>
+                  </tr>
+                <% end %>
+              <% else %>
+                <tr><td colspan="3" class="px-4 py-6 text-center text-gray-500">受信履歴はありません</td></tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="flex items-center gap-2">
+    <%= link_to "ユーザ情報編集", edit_user_registration_path,
+          class: "rounded-lg bg-black px-3 py-2 text-sm font-medium text-white hover:opacity-90" %>
+  </div>
+</div>

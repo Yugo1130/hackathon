@@ -8,6 +8,18 @@ class TokensController < ApplicationController
 
   # GET /tokens/1 or /tokens/1.json
   def show
+    @all_transfers = @token.transfers.active.where(status: :sent).order(created_at: :asc)
+
+    @current_holder = @token.transfers.active.where(status: [:received, :url_issued]).order(updated_at: :desc).first&.sender
+
+    @my_sent_transfers = @all_transfers.where(sender: current_user)
+
+    @my_received_transfers = @all_transfers.where(receiver: current_user)
+
+    @chain_count = @all_transfers.size
+
+    # 自分でなければnilが入る
+    @editable_transfer = @token.latest_editable_transfer(current_user)
   end
 
   # GET /tokens/new
@@ -21,17 +33,26 @@ class TokensController < ApplicationController
 
   # POST /tokens or /tokens.json
   def create
-    @token = Token.new(token_params)
+    # トークン発行，移転履歴の作成をトランザクションでまとめて実行
+    ActiveRecord::Base.transaction do
+      # トークンを新規作成
+      @token = Token.create!(token_params)
 
-    respond_to do |format|
-      if @token.save
-        format.html { redirect_to @token, notice: "Token was successfully created." }
-        format.json { render :show, status: :created, location: @token }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @token.errors, status: :unprocessable_entity }
-      end
+      # トークンの最初の譲渡情報を作成（送信者は自分、ステータスは受領済）
+      @token.transfers.create!(
+        token: @token,
+        sender: current_user,
+        status: :received,
+      )
     end
+
+    flash[:notice] = "新しいトークンを発行しました。"
+    redirect_to token_path(@token)
+
+    rescue ActiveRecord::RecordInvalid => e
+      flash[:alert] = "トークンの発行に失敗しました。#{e.message}"
+      redirect_to mypage_path
+    ensure
   end
 
   # PATCH/PUT /tokens/1 or /tokens/1.json

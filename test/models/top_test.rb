@@ -1,6 +1,6 @@
 require "test_helper"
 
-class UrlTest < ActiveSupport::TestCase
+class TopTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

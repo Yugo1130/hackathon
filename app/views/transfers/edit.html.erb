@@ -1,12 +1,42 @@
 <% content_for :title, "Editing transfer" %>
 
-<h1>Editing transfer</h1>
+<h1 class="text-2xl font-semibold tracking-tight mb-4">Editing transfer</h1>
 
-<%= render "form", transfer: @transfer %>
+<%= form_with model: @transfer, local: true, html: { class: "space-y-6 max-w-3xl" } do |f| %>
+  <%# メッセージ編集 %>
+  <div class="field">
+    <%= f.label :message, "メッセージ", class: "block text-sm font-medium text-gray-700" %>
+    <div class="mt-2">
+      <%= f.text_area :message,
+            rows: 4,
+            class: "block w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-600 focus:ring-blue-600" %>
+    </div>
+    <p class="mt-1 text-xs text-gray-500">メッセージを変更すると、対応するURLも更新されます。</p>
+  </div>
+
+  <div class="actions flex flex-wrap gap-3">
+    <!-- URLを発行（同一トランザクションで status 変更など） -->
+    <%= button_tag "URLを発行",
+          type: "submit",
+          name: "issue_url",
+          value: "1",
+          class: "inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 active:bg-blue-800" %>
+  </div>
+<% end %>
 
 <br>
 
-<div>
-  <%= link_to "Show this transfer", @transfer %> |
-  <%= link_to "Back to transfers", transfers_path %>
+<% if @transfer.slug.present? %>
+  <% full_url = "#{request.base_url}/t/#{@transfer.slug}" %>
+  <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 max-w-3xl">
+    <span class="block text-sm font-medium text-emerald-900 mb-1">発行済みURL（このURLを送信してください）</span>
+    <%= link_to full_url, full_url, target: "_blank", rel: "noopener",
+          class: "break-all text-emerald-900 underline underline-offset-2 hover:opacity-80" %>
+  </div>
+<% end %>
+
+<div class="mt-4 flex items-center gap-3 text-sm">
+  <%= link_to "Show this transfer", @transfer, class: "text-gray-700 hover:text-gray-900 underline underline-offset-2" %>
+  <span class="text-gray-300">|</span>
+  <%= link_to "Back to transfers", transfers_path, class: "text-gray-700 hover:text-gray-900 underline underline-offset-2" %>
 </div>

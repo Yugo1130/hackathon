@@ -1,0 +1,17 @@
+<!-- app/views/transfers/receive.html.erb -->
+<% content_for :title, "受け取り" %>
+
+<div class="max-w-3xl space-y-6">
+  <h1 class="text-2xl font-semibold">
+    <%= "#{@transfer.sender_id} からあなた宛てにメッセージが届いています！" %>
+  </h1>
+
+  <%# 受け取りボタン（POST /t/:slug/receive） %>
+  <div>
+    <%= button_to "受け取る",
+          receive_transfer_path(slug: params[:slug]),
+          method: :post,
+          data: { turbo_confirm: "このトークンを受け取りますか？" },
+          class: "inline-flex items-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700" %>
+  </div>
+</div>

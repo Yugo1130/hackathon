@@ -1,16 +1,25 @@
-<p style="color: green"><%= notice %></p>
-
 <% content_for :title, "Tokens" %>
 
-<h1>Tokens</h1>
+<h2 class="mb-3 text-lg font-semibold">トークン一覧</h2>
 
-<div id="tokens">
-  <% @tokens.each do |token| %>
-    <%= render token %>
-    <p>
-      <%= link_to "Show this token", token %>
-    </p>
-  <% end %>
+<div class="overflow-x-auto rounded-2xl border bg-white">
+  <table class="min-w-full text-sm">
+    <thead class="bg-gray-50 text-gray-600">
+      <tr>
+        <th class="px-4 py-2 text-left font-medium">トークンID</th>
+        <th class="px-4 py-2 text-left font-medium">トークン作成日</th>
+        <th class="px-4 py-2 text-left font-medium">チェーン数</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y">
+      <% @tokens.each do |token| %>
+        <tr class="hover:bg-gray-50 cursor-pointer"
+              onclick="window.location.href='<%= token_path(token) %>'">
+          <td class="px-4 py-2"><%= token.id %></td>
+          <td class="px-4 py-2"><%= l token.created_at %></td>
+          <td class="px-4 py-2"><%= token.transfers.active.where(status: :sent).order(created_at: :asc).size %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>
-
-<%= link_to "New token", new_token_path %>

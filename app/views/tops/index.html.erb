@@ -1,0 +1,58 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Tops" %>
+
+<h1>Tops</h1>
+
+<!-- app/views/top/index.html.erb -->
+<div class="flex flex-col justify-center items-center p-6 h-100 mb-10"
+     style="background: linear-gradient(to right, #F08B71, orange);">
+  <!-- アプリタイトル -->
+  <h1 class="text-5xl text-gray-800 mb-6 text-center drop-shadow-lg font-extrabold">
+    batonee
+  </h1>
+
+  <!-- アプリ紹介文 -->
+  <p class="text-xl text-gray-700 mb-8 max-w-xl text-center">
+    このアプリは感謝のことばが循環するようすが見れるアプリです。eギフト事業を手掛ける某企業のインターンで集まったメンバーが、その企業理念に共感し、”キモチの循環”を実現するため開発しました。ぜひお試しください！
+  </p>
+</div>
+
+<!-- STATISTICS 見出し -->
+<h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">STATISTICS</h2>
+
+<!-- 今日の結果 -->
+<h3 class="text-xl font-semibold text-gray-700 mb-4 text-center">今日の結果</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-5xl mx-auto justify-items-center text-center">
+  <div class="bg-white rounded-xl shadow-md p-6">
+    <h4 class="text-lg font-semibold text-gray-800 mb-2">今日のチェーン数</h4>
+    <p class="text-2xl font-bold" style="color :#F08B71;"><%= @today_chains %></p>
+  </div>
+</div>
+
+<!-- 全体の結果 -->
+<h3 class="text-xl font-semibold text-gray-700 mb-4 text-center">全体の結果</h3>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full max-w-5xl mb-10 mx-auto text-center">
+  <div class="bg-white rounded-xl shadow-md p-6">
+    <h4 class="text-lg font-semibold text-gray-800 mb-2">合計チェーン数</h4>
+    <p class="text-2xl font-bold" style="color :#F08B71;"><%= @total_chains %></p>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-md p-6">
+    <h4 class="text-lg font-semibold text-gray-800 mb-2">トークンの数</h4>
+    <p class="text-2xl font-bold" style="color :#F08B71;"><%= @total_tokens %></p>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-md p-6">
+    <h4 class="text-lg font-semibold text-gray-800 mb-2">最長トークン長</h4>
+    <p class="text-2xl font-bold" style="color :#F08B71;"><%= @longest_token_length %></p>
+  </div>
+</div>
+
+<!-- はじめるボタン -->
+<div class="text-center">
+  <a href="<%= mypage_path %>"
+      class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md transition duration-300">
+    はじめる
+  </a>
+</div>

@@ -37,6 +37,12 @@ class TransfersController < ApplicationController
 
   # PATCH/PUT /transfers/1 or /transfers/1.json
   def update
+    # 送付済の譲渡情報は編集不可
+    if @transfer.sent?
+      redirect_to edit_transfer_path(@transfer), alert: "送付済の譲渡情報は編集できません。"
+      return
+    end
+
     ActiveRecord::Base.transaction do
       # updateではmessageのみ更新可能
       @transfer.assign_attributes(transfer_params_update)

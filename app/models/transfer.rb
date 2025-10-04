@@ -45,4 +45,14 @@ class Transfer < ApplicationRecord
             )
         end
     end
+
+    # 今日のチェーン数
+    def self.today_chains
+        where("created_at >= ?", Time.current.beginning_of_day).count
+    end
+
+    #　全体のチェーン数
+    def self.total_chains
+        count
+    end
 end

@@ -19,4 +19,7 @@ Rails.application.routes.draw do
 
   get "/t/:slug", to: "transfers#show_by_slug", as: :transfer_by_slug
   post "/t/:slug/receive", to: "transfers#receive", as: :receive_transfer
+
+  root "tops#index"
+  resources :tops
 end

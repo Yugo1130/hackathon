@@ -15,10 +15,10 @@ class Token < ApplicationRecord
     end
 
     # 編集可能な最新の譲渡情報を取得
-    def latest_editable_transfer
+    def latest_editable_transfer(user)
         transfers
             .editable
-            .where(sender: current_user)
+            .where(sender: user)
             .order(created_at: :desc)
             .first
     end

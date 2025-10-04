@@ -19,7 +19,7 @@ class TokensController < ApplicationController
     @chain_count = @all_transfers.size
 
     # 自分でなければnilが入る
-    @editable_transfer = @token.latest_editable_transfer
+    @editable_transfer = @token.latest_editable_transfer(current_user)
   end
 
   # GET /tokens/new

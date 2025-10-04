@@ -36,15 +36,22 @@ class TransfersController < ApplicationController
 
   # PATCH/PUT /transfers/1 or /transfers/1.json
   def update
-    respond_to do |format|
-      if @transfer.update(transfer_params)
-        format.html { redirect_to @transfer, notice: "Transfer was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @transfer }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @transfer.errors, status: :unprocessable_entity }
+    ActiveRecord::Base.transaction do
+      # updateではmessageのみ更新可能
+      @transfer.assign_attributes(transfer_params_update)
+
+      # 「URLを発行して保存」ボタンから来たか（今回はこの1ボタンのみ）
+      if params[:issue_url].present?
+        @transfer.status = :url_issued
+        @transfer.slug = generate_unique_slug(except_id: @transfer.id)
       end
+      @transfer.save!
     end
+
+    redirect_to edit_transfer_path(@transfer), notice: "URLを発行しました"
+  rescue ActiveRecord::RecordInvalid => e
+    flash.now[:alert] = "保存に失敗しました: #{e.record.errors.full_messages.join(', ')}"
+    render :edit, status: :unprocessable_entity
   end
 
   # DELETE /transfers/1 or /transfers/1.json
@@ -71,8 +78,30 @@ class TransfersController < ApplicationController
       @transfer = Transfer.find(params[:id])
     end
 
+    # slugを一意に生成
+    # except_id: 自分自身のIDを除外する（更新時用）
+    def generate_unique_slug(except_id: nil)
+      loop do
+        # 好みで :uuid / :hex / :urlsafe を選択
+        slug = SecureRandom.uuid
+
+        # 自分以外に同じslugが無ければ採用
+        clash = Transfer.where(slug: slug)
+        clash = clash.where.not(id: except_id) if except_id
+        return slug unless clash.exists?
+      end
+    end
+
     # Only allow a list of trusted parameters through.
     def transfer_params
-      params.fetch(:transfer, {})
+      params.require(:transfer).permit(
+        :message, :token_id, :sender_id, :receiver_id, :previous_transfer_id, :status, :slug
+      )
+    end
+
+    def transfer_params_update
+      params.require(:transfer).permit(
+        :message
+      )
     end
 end

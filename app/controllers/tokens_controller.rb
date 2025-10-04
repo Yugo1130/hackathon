@@ -3,7 +3,12 @@ class TokensController < ApplicationController
 
   # GET /tokens or /tokens.json
   def index
-    @tokens = Token.all
+    # 送信済みのリレー数でソートして取得
+    @tokens = Token
+      .left_joins(:transfers)
+      .select('tokens.*, COUNT(transfers.id) AS sent_count')
+      .group('tokens.id')
+      .order('sent_count DESC, tokens.created_at DESC') # 同数のとき新しい順
   end
 
   # GET /tokens/1 or /tokens/1.json

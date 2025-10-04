@@ -1,7 +1,15 @@
 Rails.application.routes.draw do
   resources :tokens
   resources :transfers
-  devise_for :users
+  devise_for :users, controllers: {
+    # confirmations: 'users/confirmations',
+    # omniauth_callbacks: 'users/omniauth_callbacks',
+    # passwords: 'users/passwords',
+    registrations: 'users/registrations',
+    sessions: 'users/sessions',
+    # unlocks: 'users/unlocks',
+  }
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

@@ -4,10 +4,10 @@
   <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
     <h1 class="text-2xl font-bold">マイページ</h1>
     <div class="flex items-center gap-2">
-      <%= button_to "新しいトークンを発行する",
+      <%= button_to "新しいバトンを発行する",
             tokens_path, method: :post,
-            data: { turbo_confirm: "新しいトークンを発行します。よろしいですか？" },
-            class: "rounded-lg bg-black px-3 py-2 text-sm font-medium text-white hover:opacity-90" %>
+            data: { turbo_confirm: "新しいバトンを発行します。よろしいですか？" },
+            class: "rounded-lg bg-[#F08B71] px-3 py-2 text-sm font-medium text-white hover:opacity-90" %>
     </div>
   </div>
 
@@ -18,9 +18,9 @@
     </div>
   <% end %>
 
-  <!-- 所持トークン一覧 -->
+  <!-- 所持バトン一覧 -->
   <section class="mt-2">
-    <h2 class="mb-3 text-lg font-semibold">所持トークン一覧</h2>
+    <h2 class="mb-3 text-lg font-semibold">所持バトン一覧</h2>
 
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <% if @owned_tokens.present? %>
@@ -28,7 +28,7 @@
           <%= link_to token_path(token),
                       class: "group block rounded-2xl border p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow" do %>
             <div class="flex items-center justify-between">
-              <p class="font-semibold"><%= "トークン #{token.id} " %></p>
+              <p class="font-semibold"><%= "バトン #{token.id} " %></p>
               <span class="text-xs text-gray-500 group-hover:text-gray-700">詳細へ</span>
             </div>
             <% if token.respond_to?(:description) %>
@@ -38,7 +38,7 @@
         <% end %>
       <% else %>
         <div class="rounded-2xl border p-6 text-center text-gray-500">
-          所持トークンはまだありません
+          所持バトンはまだありません
         </div>
       <% end %>
     </div>
@@ -54,7 +54,7 @@
           <table class="min-w-full text-sm">
             <thead class="bg-gray-50 text-gray-600">
               <tr>
-                <th class="px-4 py-2 text-left font-medium">トークンID</th>
+                <th class="px-4 py-2 text-left font-medium">バトンID</th>
                 <th class="px-4 py-2 text-left font-medium">送信日時</th>
                 <th class="px-4 py-2 text-left font-medium">受信者</th>
                 <th class="px-4 py-2 text-left font-medium">メッセージ内容</th>
@@ -84,7 +84,7 @@
           <table class="min-w-full text-sm">
             <thead class="bg-gray-50 text-gray-600">
               <tr>
-                <th class="px-4 py-2 text-left font-medium">トークンID</th>
+                <th class="px-4 py-2 text-left font-medium">バトンID</th>
                 <th class="px-4 py-2 text-left font-medium">受信日時</th>
                 <th class="px-4 py-2 text-left font-medium">送信者</th>
                 <th class="px-4 py-2 text-left font-medium">メッセージ内容</th>
@@ -111,6 +111,6 @@
   </section>
   <div class="flex items-center gap-2">
     <%= link_to "ユーザ情報編集", edit_user_registration_path,
-          class: "rounded-lg bg-black px-3 py-2 text-sm font-medium text-white hover:opacity-90" %>
+          class: "rounded-lg bg-[#F08B71] px-3 py-2 text-sm font-medium text-white hover:opacity-90" %>
   </div>
 </div>

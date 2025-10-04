@@ -5,6 +5,8 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+  validates :name, presence: true, length: { maximum: 50 }
+
 
   # 論理削除されていないものだけ取得
   scope :active, -> { where(deleted_at: nil) }

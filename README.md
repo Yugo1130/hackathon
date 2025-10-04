@@ -21,11 +21,7 @@ docker compose exec web bash
 
 - dbコンテナへの入り方
 
-docker compose exec db psql -U postgres -d postgres  (管理用DB)
-
-docker compose exec db psql -U postgres -d myapp_development  (アプリDB)
-
-この違いはよくわからないが，基本はアプリDBで行う
+docker compose exec db psql -U postgres -d myapp_development
 
 
 ## やったこと

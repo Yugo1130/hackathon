@@ -1,23 +1,33 @@
 <% content_for :title, "Tokens" %>
 
-<h2 class="mb-3 text-lg font-semibold">トークン一覧</h2>
+<h2 class="mb-3 text-lg font-semibold">バトンランキング</h2>
 
 <div class="overflow-x-auto rounded-2xl border bg-white">
   <table class="min-w-full text-sm">
     <thead class="bg-gray-50 text-gray-600">
       <tr>
-        <th class="px-4 py-2 text-left font-medium">トークンID</th>
-        <th class="px-4 py-2 text-left font-medium">トークン作成日</th>
-        <th class="px-4 py-2 text-left font-medium">チェーン数</th>
+        <th class="px-4 py-2 text-left font-medium">順位</th>
+        <th class="px-4 py-2 text-left font-medium">バトンID</th>
+        <th class="px-4 py-2 text-left font-medium">バトン作成日</th>
+        <th class="px-4 py-2 text-left font-medium">リレー回数</th>
       </tr>
     </thead>
     <tbody class="divide-y">
       <% @tokens.each do |token| %>
         <tr class="hover:bg-gray-50 cursor-pointer"
               onclick="window.location.href='<%= token_path(token) %>'">
+          <% if @tokens.index(token) + 1 == 1 %>
+            <td class="px-4 py-2 text-yellow-500">🥇</td>
+          <% elsif @tokens.index(token) + 1 == 2 %>
+            <td class="px-4 py-2 text-gray-400">🥈</td>
+          <% elsif @tokens.index(token) + 1 == 3 %>
+            <td class="px-4 py-2 text-yellow-600">🥉</td >
+          <% else %>
+          <td class="px-4 py-2"><%= @tokens.index(token) + 1 %></td>
+          <% end %>
           <td class="px-4 py-2"><%= token.id %></td>
           <td class="px-4 py-2"><%= l token.created_at %></td>
-          <td class="px-4 py-2"><%= token.transfers.active.where(status: :sent).order(created_at: :asc).size %></td>
+          <td class="px-4 py-2"><%= token[:sent_count] - 1 %></td>
         </tr>
       <% end %>
     </tbody>

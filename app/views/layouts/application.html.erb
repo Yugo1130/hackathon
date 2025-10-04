@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Myapp" %></title>
+    <title><%= "batonee" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
@@ -33,25 +33,25 @@
       <nav class="max-w-7xl mx-auto h-16 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         <!-- 左：ロゴ + デスクトップ用ナビ -->
         <div class="flex items-center gap-6">
-          <a href="/" class="text-lg sm:text-xl font-bold tracking-tight">Myapp</a>
+          <a href="/" class="text-lg sm:text-xl font-bold tracking-tight">batonee</a>
           <div class="hidden md:flex items-center gap-4">
-            <%= link_to "Tokens", tokens_path,     class: "text-sm font-medium text-gray-700 hover:text-gray-900" %>
-            <%= link_to "Transfers", transfers_path, class: "text-sm font-medium text-gray-700 hover:text-gray-900" %>
+            <%= link_to "バトンランキング", tokens_path,     class: "text-sm font-medium text-gray-700 hover:text-gray-900" %>
+            <%= link_to "リレー履歴", transfers_path, class: "text-sm font-medium text-gray-700 hover:text-gray-900" %>
           </div>
         </div>
 
         <!-- 右：アクション（ログイン/ログアウトなど） -->
         <div class="hidden md:flex items-center gap-3">
           <% if defined?(user_signed_in?) && user_signed_in? %>
-            <%= link_to "Mypage", mypage_path,
+            <%= link_to "マイページ", mypage_path,
                   class: "inline-flex items-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
-            <%= button_to "Logout", destroy_user_session_path, method: :delete,
-                  class: "inline-flex items-center rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700" %>
+            <%= button_to "ログアウト", destroy_user_session_path, method: :delete,
+                  class: "inline-flex items-center rounded-lg bg-black px-3 py-2 text-sm font-medium text-white hover:bg-blue-700" %>
           <% else %>
-            <%= link_to "Sign in", new_user_session_path,
+            <%= link_to "ログイン", new_user_session_path,
                   class: "inline-flex items-center rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
-            <%= link_to "Sign up", new_user_registration_path,
-                  class: "inline-flex items-center rounded-lg bg-blue-600 px-3 py-2 text-sm font-medium text-white hover:bg-blue-700" %>
+            <%= link_to "登録", new_user_registration_path,
+                  class: "inline-flex items-center rounded-lg bg-[#F08B71] px-3 py-2 text-sm font-medium text-white hover:opacity-90" %>
           <% end %>
         </div>
 
@@ -69,17 +69,17 @@
       <!-- モバイル用メニュー -->
       <div id="mobile-menu" class="md:hidden hidden border-t border-gray-200 bg-white" role="region">
         <div class="px-4 py-3 space-y-2">
-          <%= link_to "Tokens", tokens_path,       class: "block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
-          <%= link_to "Transfers", transfers_path, class: "block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
+          <%= link_to "バトンランキング", tokens_path,       class: "block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
+          <%= link_to "リレー履歴", transfers_path, class: "block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
           <div class="border-t border-gray-200 my-2"></div>
           <% if defined?(user_signed_in?) && user_signed_in? %>
-            <%= link_to "Mypage", mypage_path, class: "block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
-            <%= button_to "Logout", destroy_user_session_path, method: :delete,
+            <%= link_to "マイページ", mypage_path, class: "block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
+            <%= button_to "ログアウト", destroy_user_session_path, method: :delete,
                   class: "block rounded-md px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50" %>
           <% else %>
-            <%= link_to "Sign in", new_user_session_path, class: "block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
-            <%= link_to "Sign up", new_user_registration_path,
-                  class: "block rounded-md px-3 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 text-center" %>
+            <%= link_to "ログイン", new_user_session_path, class: "block rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
+            <%= link_to "登録", new_user_registration_path,
+                  class: "block rounded-md px-3 py-2 text-sm font-medium text-white bg-[#F08B71] hover:opacity-90 text-center" %>
           <% end %>
         </div>
       </div>
@@ -103,7 +103,7 @@
     <!-- フッター -->
     <footer class="border-t border-gray-200 bg-white">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-sm text-gray-500">
-        &copy; <%= Time.current.year %> Myapp
+        &copy; <%= Time.current.year %> batonee
       </div>
     </footer>
 

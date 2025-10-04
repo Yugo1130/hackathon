@@ -1,0 +1,12 @@
+<% content_for :title, "Editing top" %>
+
+<h1>Editing top</h1>
+
+<%= render "form", top: @top %>
+
+<br>
+
+<div>
+  <%= link_to "Show this top", @top %> |
+  <%= link_to "Back to tops", tops_path %>
+</div>

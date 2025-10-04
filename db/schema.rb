@@ -21,6 +21,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_03_063609) do
     t.index ["deleted_at"], name: "index_tokens_on_deleted_at"
   end
 
+  create_table "tops", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "transfers", force: :cascade do |t|
     t.bigint "token_id", null: false
     t.bigint "sender_id", null: false

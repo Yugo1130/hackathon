@@ -1,0 +1,133 @@
+<% content_for :title, "マイページ | Myapp" %>
+
+<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+  <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <h1 class="text-2xl font-bold">マイページ</h1>
+    <div class="flex items-center gap-2">
+      <%= button_to "新しいトークンを発行する",
+            tokens_path, method: :post,
+            data: { turbo_confirm: "新しいトークンを発行します。よろしいですか？" },
+            class: "rounded-lg bg-black px-3 py-2 text-sm font-medium text-white hover:opacity-90" %>
+    </div>
+  </div>
+
+  <% if flash[:issued_url].present? %>
+    <div class="mb-6 rounded-xl border bg-gray-50 px-4 py-3 text-sm">
+      発行されたURL：
+      <a class="font-medium underline" href="<%= flash[:issued_url] %>"><%= flash[:issued_url] %></a>
+    </div>
+  <% end %>
+
+  <!-- 所持トークン一覧 -->
+  <section class="mt-2">
+    <h2 class="mb-3 text-lg font-semibold">所持トークン一覧</h2>
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <% if @owned_tokens.present? %>
+        <% @owned_tokens.each do |token| %>
+          <%= link_to token_path(token),
+                      class: "group block rounded-2xl border p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow" do %>
+            <div class="flex items-center justify-between">
+              <p class="font-semibold"><%= "トークン #{token.id} " %></p>
+              <span class="text-xs text-gray-500 group-hover:text-gray-700">詳細へ</span>
+            </div>
+            <% if token.respond_to?(:description) %>
+              <p class="mt-2 line-clamp-2 text-sm text-gray-600"><%= token.description %></p>
+            <% end %>
+          <% end %>
+        <% end %>
+      <% else %>
+        <div class="rounded-2xl border p-6 text-center text-gray-500">
+          所持トークンはまだありません
+        </div>
+      <% end %>
+    </div>
+  </section>
+
+  <!-- 履歴（受信/送信） -->
+  <section class="mt-10">
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+      <!-- 受信履歴 -->
+      <div>
+        <h2 class="mb-3 text-lg font-semibold">受信履歴</h2>
+        <div class="space-y-3">
+          <% if @received_token_transfers.present? %>
+            <% @received_token_transfers.each do |t| %>
+              <%= link_to transfer_path(t),
+                    class: "flex items-center justify-between rounded-2xl border p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow" do %>
+                <div>
+                  <p class="font-medium">
+                    履歴<%= t.id %>
+                    <% if t.token %>
+                      ・<span class="text-gray-600"><%= t.token.title.presence || "トークン#{t.token_id}" %></span>
+                    <% end %>
+                  </p>
+                  <p class="text-xs text-gray-500">
+                    更新：<%= (l(t.updated_at, format: :short) rescue t.updated_at) %>
+                  </p>
+                </div>
+                <span class="rounded-full border px-2 py-1 text-xs
+                  <%= case t.status.to_s
+                      when "received"   then "bg-emerald-50 text-emerald-700 border-emerald-200"
+                      when "url_issued" then "bg-amber-50 text-amber-700 border-amber-200"
+                      when "sent"       then "bg-sky-50 text-sky-700 border-sky-200"
+                      else                    "bg-gray-50 text-gray-700"
+                    end %>">
+                  <%= t.status %>
+                </span>
+              <% end %>
+            <% end %>
+          <% else %>
+            <div class="rounded-2xl border p-6 text-center text-gray-500">
+              受信履歴はありません
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- 送信履歴 -->
+      <div>
+        <h2 class="mb-3 text-lg font-semibold">送信履歴</h2>
+        <div class="space-y-3">
+          <% if @sent_token_transfers.present? %>
+            <% @sent_token_transfers.each do |t| %>
+              <%= link_to transfer_path(t),
+                    class: "flex items-center justify-between rounded-2xl border p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow" do %>
+                <div>
+                  <p class="font-medium">
+                    履歴<%= t.id %>
+                    <% if t.token %>
+                      ・<span class="text-gray-600"><%= t.token.title.presence || "トークン#{t.token_id}" %></span>
+                    <% end %>
+                  </p>
+                  <p class="text-xs text-gray-500">
+                    作成：<%= (l(t.created_at, format: :short) rescue t.created_at) %>
+                  </p>
+                </div>
+                <span class="rounded-full border px-2 py-1 text-xs
+                  <%= case t.status.to_s
+                      when "received"   then "bg-emerald-50 text-emerald-700 border-emerald-200"
+                      when "url_issued" then "bg-amber-50 text-amber-700 border-amber-200"
+                      when "sent"       then "bg-sky-50 text-sky-700 border-sky-200"
+                      else                    "bg-gray-50 text-gray-700"
+                    end %>">
+                  <%= t.status %>
+                </span>
+              <% end %>
+            <% end %>
+          <% else %>
+            <div class="rounded-2xl border p-6 text-center text-gray-500">
+              送信履歴はありません
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <div class="flex items-center gap-2">
+      <%= link_to "ユーザ情報編集", edit_user_registration_path,
+            class: "rounded-lg border px-3 py-2 text-sm hover:bg-gray-50" %>
+    </div>
+  </div>
+</div>

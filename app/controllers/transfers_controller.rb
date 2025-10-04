@@ -57,10 +57,18 @@ class TransfersController < ApplicationController
     end
   end
 
+  def show_by_slug
+    @transfer = Transfer.active.where(status: :url_issued).find_by!(slug: params[:slug])
+    @token = @transfer.token
+    render :receive
+  rescue ActiveRecord::RecordNotFound
+    redirect_to mypage_path, alert: "無効なURLです。"
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_transfer
-      @transfer = Transfer.find(params.expect(:id))
+      @transfer = Transfer.find(params[:id])
     end
 
     # Only allow a list of trusted parameters through.

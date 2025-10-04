@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_01_081359) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_03_063609) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -31,22 +31,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_01_081359) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.string "slug"
     t.index ["deleted_at"], name: "index_transfers_on_deleted_at"
     t.index ["previous_transfer_id"], name: "index_transfers_on_previous_transfer_id"
     t.index ["receiver_id"], name: "index_transfers_on_receiver_id"
     t.index ["sender_id"], name: "index_transfers_on_sender_id"
+    t.index ["slug"], name: "index_transfers_on_slug", unique: true
     t.index ["token_id"], name: "index_transfers_on_token_id"
-  end
-
-  create_table "urls", force: :cascade do |t|
-    t.bigint "transfer_id", null: false
-    t.string "slug", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "deleted_at"
-    t.index ["deleted_at"], name: "index_urls_on_deleted_at"
-    t.index ["slug"], name: "index_urls_on_slug", unique: true
-    t.index ["transfer_id"], name: "index_urls_on_transfer_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -67,5 +58,4 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_01_081359) do
   add_foreign_key "transfers", "transfers", column: "previous_transfer_id"
   add_foreign_key "transfers", "users", column: "receiver_id"
   add_foreign_key "transfers", "users", column: "sender_id"
-  add_foreign_key "urls", "transfers"
 end

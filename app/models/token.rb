@@ -13,4 +13,18 @@ class Token < ApplicationRecord
     def current_transfer
         transfers.where(status: [:received, :url_issued]).order(created_at: :desc).first
     end
+
+    # 編集可能な最新の譲渡情報を取得
+    def latest_editable_transfer
+        transfers
+            .editable
+            .where(sender: current_user)
+            .order(created_at: :desc)
+            .first
+    end
+
+    # 送付済の譲渡情報のチェーンを取得（created_atの昇順）
+    def chain
+        transfers.active.where(status: :sent).order(created_at: :asc)
+    end
 end

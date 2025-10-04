@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
-  resources :urls
-  resources :transfers
   resources :tokens
+  resources :transfers
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -15,4 +14,9 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+  resource :mypage, only: :show   # => GET /mypage -> MypagesController#show
+
+  get "/t/:slug", to: "transfers#show_by_slug", as: :transfer_by_slug
+  post "/t/:slug/receive", to: "transfers#receive", as: :receive_transfer
 end

@@ -18,8 +18,8 @@
               onclick="window.location.href='<%= transfer_path(transfer) %>'">
           <td class="px-4 py-2"><%= transfer.id %></td>
           <td class="px-4 py-2"><%= l transfer.created_at %></td>
-          <td class="px-4 py-2"><%= transfer.sender&.id %></td>
-          <td class="px-4 py-2"><%= transfer.receiver&.id %></td>
+          <td class="px-4 py-2"><%= "#{transfer.sender&.name}" %></td>
+          <td class="px-4 py-2"><%= "#{transfer.receiver&.name}" %></td>
         </tr>
       <% end %>
     </tbody>

@@ -17,7 +17,7 @@
 
     <% else %>
         <h1 class="text-2xl font-semibold">
-            <%= "#{@transfer.sender_id} からあなた宛てにメッセージが届いています！" %>
+            <%= "#{@transfer.sender.name} からあなた宛てにメッセージが届いています！" %>
         </h1>
 
         <%# 受け取りボタン（POST /t/:slug/receive） %>

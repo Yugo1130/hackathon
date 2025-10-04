@@ -24,7 +24,7 @@
       <div class="rounded-2xl border bg-white p-4">
         <div class="text-sm text-gray-500">現在の保有ユーザ</div>
         <div class="mt-1 text-xl font-semibold">
-          <%= @current_holder&.id || "不明" %>
+          <%= "#{@current_holder&.name} (ID: #{@current_holder&.id})" %>
         </div>
       </div>
 
@@ -54,8 +54,8 @@
               <% @my_sent_transfers.each do |tr| %>
                 <tr class="hover:bg-gray-50 cursor-pointer" onclick="window.location.href='<%= transfer_path(tr) %>'">
                   <td class="px-4 py-2"><%= l tr.created_at %></td>
-                  <td class="px-4 py-2"><%= tr.receiver&.id %></td>
-                  <td class="px-4 py-2">  <%= h(tr.message.to_s.squish.truncate(20, omission: '…')) %>                    </td>
+                  <td class="px-4 py-2"><%= "#{tr.receiver&.name}" %></td>
+                  <td class="px-4 py-2"><%= h(tr.message.to_s.squish.truncate(20, omission: '…')) %></td>
                 </tr>
               <% end %>
             <% else %>
@@ -83,8 +83,8 @@
               <% @my_received_transfers.each do |tr| %>
                 <tr class="hover:bg-gray-50 cursor-pointer" onclick="window.location.href='<%= transfer_path(tr) %>'">
                   <td class="px-4 py-2"><%= l tr.created_at %></td>
-                  <td class="px-4 py-2"><%= tr.sender&.id %></td>
-                  <td class="px-4 py-2">  <%= h(tr.message.to_s.squish.truncate(20, omission: '…')) %>                    </td>
+                  <td class="px-4 py-2"><%= "#{tr.sender&.name}" %></td>
+                  <td class="px-4 py-2"><%= h(tr.message.to_s.squish.truncate(20, omission: '…')) %></td>
                 </tr>
               <% end %>
             <% else %>
@@ -113,8 +113,8 @@
             <% @all_transfers.each do |tr| %>
               <tr class="hover:bg-gray-50 cursor-pointer" onclick="window.location.href='<%= transfer_path(tr) %>'">
                 <td class="px-4 py-2"><%= l tr.created_at %></td>
-                <td class="px-4 py-2"><%= tr.sender&.id %></td>
-                <td class="px-4 py-2"><%= tr.receiver&.id %></td>
+                <td class="px-4 py-2"><%= "#{tr.sender&.name}" %></td>
+                <td class="px-4 py-2"><%= "#{tr.receiver&.name}" %></td>
               </tr>
             <% end %>
           <% else %>

@@ -91,7 +91,7 @@ class TransfersController < ApplicationController
       return 
     end
     @transfer.receive!(current_user)
-    redirect_to mypage_path, notice: "バトンを受け取りました。"
+    redirect_to transfer_path(@transfer), notice: "バトンを受け取りました。"
   rescue ActiveRecord::RecordInvalid => e
     redirect_to mypage_path, alert: "バトンの受け取りに失敗しました。#{e.message}"
   end        

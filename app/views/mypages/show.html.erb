@@ -3,12 +3,6 @@
 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
   <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
     <h1 class="text-2xl font-bold">マイページ</h1>
-    <div class="flex items-center gap-2">
-      <%= button_to "新しいバトンを発行する",
-            tokens_path, method: :post,
-            data: { turbo_confirm: "新しいバトンを発行します。よろしいですか？" },
-            class: "rounded-lg bg-[#F08B71] px-3 py-2 text-sm font-medium text-white hover:opacity-90" %>
-    </div>
   </div>
 
   <% if flash[:issued_url].present? %>
@@ -41,6 +35,15 @@
           所持バトンはまだありません
         </div>
       <% end %>
+    </div>
+
+  </section>
+  <section class="mt-2">
+      <div class="flex items-center gap-2">
+      <%= button_to "新しいバトンを発行する",
+            tokens_path, method: :post,
+            data: { turbo_confirm: "新しいバトンを発行します。よろしいですか？" },
+            class: "rounded-lg bg-[#F08B71] px-3 py-2 text-sm font-medium text-white hover:opacity-90" %>
     </div>
   </section>
 
@@ -109,8 +112,11 @@
       </div>
     </div>
   </section>
-  <div class="flex items-center gap-2">
-    <%= link_to "ユーザ情報編集", edit_user_registration_path,
-          class: "rounded-lg bg-[#F08B71] px-3 py-2 text-sm font-medium text-white hover:opacity-90" %>
-  </div>
+
+  <section class="mt-15 mb-4">
+    <div class="flex justify-center items-center	gap-2">
+      <%= link_to "ユーザ情報編集", edit_user_registration_path,
+            class: "rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium hover:bg-gray-50" %>
+    </div>
+  </section>
 </div>

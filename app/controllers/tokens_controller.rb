@@ -51,11 +51,11 @@ class TokensController < ApplicationController
       )
     end
 
-    flash[:notice] = "新しいトークンを発行しました。"
+    flash[:notice] = "新しいバトンを発行しました。"
     redirect_to token_path(@token)
 
     rescue ActiveRecord::RecordInvalid => e
-      flash[:alert] = "トークンの発行に失敗しました。#{e.message}"
+      flash[:alert] = "バトンの発行に失敗しました。#{e.message}"
       redirect_to mypage_path
     ensure
   end

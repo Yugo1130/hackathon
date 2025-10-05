@@ -104,7 +104,7 @@ class TransfersController < ApplicationController
 
     def set_transfer_by_slug!
       @transfer = Transfer.active.where(status: :url_issued).find_by!(slug: params[:slug])
-      @token = @transfer.token  # 関連するトークン
+      @token = @transfer.token  # 関連するバトン
     rescue ActiveRecord::RecordNotFound
       redirect_to mypage_path, alert: "無効なURLです。"
     end

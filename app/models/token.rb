@@ -23,17 +23,17 @@ class Token < ApplicationRecord
             .first
     end
 
-    # 送付済の譲渡情報のチェーンを取得（created_atの昇順）
+    # 送付済の譲渡情報のリレーを取得（created_atの昇順）
     def chain
         transfers.active.where(status: :sent).order(created_at: :asc)
     end
 
-    # トークン数
+    # バトン数
     def self.total_tokens
         count
     end
 
-    # 最長チェーンの長さ
+    # 最長リレーの長さ
     def self.longest_token_length
         joins(:transfers)
             .where(transfers: { status: :sent })

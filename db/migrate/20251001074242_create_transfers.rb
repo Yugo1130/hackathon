@@ -1,7 +1,7 @@
 class CreateTransfers < ActiveRecord::Migration[8.0]
   def change
     create_table :transfers do |t|
-      # トークンID
+      # バトンID
       t.references :token, null:false, foreign_key: true # token_id
 
       # ユーザー（送信者は必須、受信者はステータスが送信済になった際に追加）

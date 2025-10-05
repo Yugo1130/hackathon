@@ -38,12 +38,12 @@ class TokensController < ApplicationController
 
   # POST /tokens or /tokens.json
   def create
-    # トークン発行，移転履歴の作成をトランザクションでまとめて実行
+    # バトン発行，移転履歴の作成をトランザクションでまとめて実行
     ActiveRecord::Base.transaction do
-      # トークンを新規作成
+      # バトンを新規作成
       @token = Token.create!(token_params)
 
-      # トークンの最初の譲渡情報を作成（送信者は自分、ステータスは受領済）
+      # バトンの最初の譲渡情報を作成（送信者は自分、ステータスは受領済）
       @token.transfers.create!(
         token: @token,
         sender: current_user,

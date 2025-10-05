@@ -31,7 +31,7 @@ class Transfer < ApplicationRecord
         update!(status: :url_issued, slug: (slug || SecureRandom.uuid))
     end
 
-    # 受領（チェーンを伸ばす）
+    # 受領（リレーを伸ばす）
     def receive!(receiver_user)
         transaction do
             # 既存の譲渡情報を送付済に更新
@@ -46,13 +46,13 @@ class Transfer < ApplicationRecord
         end
     end
 
-    # 今日のチェーン数
+    # 今日のリレー数
     def self.today_chains
         where(status: :sent).
           where("updated_at >= ?", Time.zone.now.beginning_of_day).count
     end
 
-    #　全体のチェーン数
+    #　全体のリレー数
     def self.total_chains
         where(status: :sent).count
     end

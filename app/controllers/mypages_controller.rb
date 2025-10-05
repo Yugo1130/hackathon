@@ -4,7 +4,7 @@ class MypagesController < ApplicationController
   def show
     @user = current_user
     
-    # 所持しているトークン
+    # 所持しているバトン
     @owned_tokens = 
       Token.joins(:transfers)
            .merge(@user.sent_transfers.active.where(status: [:received, :url_issued]).order(updated_at: :desc))

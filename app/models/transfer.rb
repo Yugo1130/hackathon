@@ -48,11 +48,12 @@ class Transfer < ApplicationRecord
 
     # 今日のチェーン数
     def self.today_chains
-        where("created_at >= ?", Time.current.beginning_of_day).count
+        where(status: :sent).
+          where("updated_at >= ?", Time.zone.now.beginning_of_day).count
     end
 
     #　全体のチェーン数
     def self.total_chains
-        count
+        where(status: :sent).count
     end
 end

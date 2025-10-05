@@ -4,7 +4,7 @@ class TransfersController < ApplicationController
 
   # GET /transfers or /transfers.json
   def index
-    @transfers = Transfer.where(status: :sent).order(created_at: :desc)
+    @transfers = Transfer.where(status: :sent).order(updated_at: :desc)
   end
 
   # GET /transfers/1 or /transfers/1.json
@@ -91,7 +91,7 @@ class TransfersController < ApplicationController
       return 
     end
     @transfer.receive!(current_user)
-    redirect_to mypage_path, notice: "バトンを受け取りました。"
+    redirect_to transfer_path(@transfer), notice: "バトンを受け取りました。"
   rescue ActiveRecord::RecordInvalid => e
     redirect_to mypage_path, alert: "バトンの受け取りに失敗しました。#{e.message}"
   end        

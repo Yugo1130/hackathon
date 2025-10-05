@@ -4,7 +4,7 @@ class TransfersController < ApplicationController
 
   # GET /transfers or /transfers.json
   def index
-    @transfers = Transfer.where(status: :sent).order(created_at: :desc)
+    @transfers = Transfer.where(status: :sent).order(updated_at: :desc)
   end
 
   # GET /transfers/1 or /transfers/1.json

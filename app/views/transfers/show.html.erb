@@ -11,7 +11,7 @@
     <% latest_sent      = @token.transfers.where(status: :sent).order(created_at: :desc).first rescue nil %>
     <% latest_received  = @token.transfers.where(status: :received).order(created_at: :desc).first rescue nil %>
 
-    <div class="grid grid-cols-12">
+    <div class="grid grid-cols-6 sm:grid-cols-12">
       <div class="col-span-3 border border-gray-300 bg-gray-50 p-4 text-sm font-medium">バトンID</div>
       <div class="col-span-3 border border-gray-300 p-4 text-base"><%= @transfer.token_id %></div>
       <div class="col-span-3 border border-gray-300 bg-gray-50 p-4 text-sm font-medium">受信日</div>

@@ -68,4 +68,4 @@ gem "omniauth"
 gem "omniauth-rails_csrf_protection"
 gem "omniauth-github"
 
-gem "tailwindcss-rails", "~> 4.3"
+gem "tailwindcss-rails", "~> 4.4"
